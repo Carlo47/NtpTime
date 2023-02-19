@@ -15,6 +15,7 @@ References  https://www.webexhibits.org/daylightsaving/i.html
 
 import time, network, ntptime
 from binascii import hexlify
+from machine import Pin
 
 SSID = 'Dodeka2G4'
 PSK  = '5408EnnetbadenHoehtalstrasse13'
@@ -22,6 +23,9 @@ MY_HOSTNAME = 'ESP8266_GSR'
 NTP_POOL    = 'ch.pool.ntp.org'
 OFFSET_MEZ  = const(1 * 60 * 60)
 OFFSET_MESZ = const(2 * 60 * 60)
+
+LEDBUILTIN = const(2)
+led = Pin(LEDBUILTIN, Pin.OUT)
 
 """
 Set local time with correction for timezone and daylight saving. 
@@ -97,6 +101,7 @@ msClockCycle = [0, 1000]
 
 while True:
     if waitIsOver(msClockCycle):
+        led.value(not led.value() )
         t = time.localtime() # (year, month, month-day, hour, min, second, weekday, year-day)
         print('%4d-%02d-%02d %02d:%02d:%02d\r' % t[0:6], end='') # display time on same line
     
